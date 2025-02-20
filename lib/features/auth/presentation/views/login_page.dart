@@ -28,7 +28,6 @@ class _LoginPageState extends State<LoginPage> {
   late final TextEditingController passwordController;
   final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
 
-
   @override
   void dispose() {
     emailController.dispose();
@@ -41,7 +40,6 @@ class _LoginPageState extends State<LoginPage> {
     emailController = TextEditingController();
     passwordController = TextEditingController();
     super.initState();
-
   }
 
   @override
@@ -93,28 +91,14 @@ class _LoginPageState extends State<LoginPage> {
                     label: S.of(context).email_address,
                     prefix: Icons.email,
                     //use "validator" to check if the user input meets requirements
-                    validator: (value) {
-                      if (!value!.contains("@")) {
-                        return S.of(context).please_enter_a_valid_email;
-                      } else {
-                        return null;
-                      }
-                    },
+                    validator: (value) => loginEmailValidator(value),
                   ),
                   //call "CustomTextField" to ask the user to enter his password
                   CustomTextField(
                     controller: passwordController,
                     label: S.of(context).password,
                     prefix: Icons.lock,
-                    validator: (value) {
-                      if (value!.length < 6) {
-                        return S
-                            .of(context)
-                            .password_should_contain_at_least_6_characters;
-                      } else {
-                        return null;
-                      }
-                    },
+                    validator: (value) => loginPasswordValidator(value),
                     isPassword: true,
                     obscureText: isPassHidden,
                     //convert the value of "loginIsPassHidden" variable when pressing the suffix icon to show and hide password
@@ -130,10 +114,11 @@ class _LoginPageState extends State<LoginPage> {
                       //if the user inputs meet all requirements, navigate to another page
                       if (_loginFormKey.currentState!.validate()) {
                         context.read<AuthBloc>().add(
-                          LoginRequested(loginEntity:
-                             LoginEntity(email: emailController.text, password: passwordController.text)
-                          ),
-                        );
+                              LoginRequested(
+                                  loginEntity: LoginEntity(
+                                      email: emailController.text,
+                                      password: passwordController.text)),
+                            );
                       }
                     },
                     text: S.of(context).Login,
@@ -156,5 +141,20 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+}
+
+loginEmailValidator(value) {
+  if (value == null || value.isEmpty || !value.contains("@")) {
+    return "Please enter a valid email";
+  }
+  return null;
+}
+
+loginPasswordValidator(value) {
+  if (value == null || value.isEmpty || value!.length < 6) {
+    return "Password should contain at least 6 characters";
+  } else {
+    return null;
   }
 }
