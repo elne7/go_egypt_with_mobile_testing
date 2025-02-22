@@ -26,6 +26,8 @@ A mobile application for tourists visiting Egypt to explore landmarks, museums, 
 - **Accessing Device Features**
   - Open the camera to take a profile picture
   - Access the profile page through fingerprint first
+- **Automated Testing Workflow** 🧪
+  - Apply `Unit` test & `Widget` test with each push operation on the main branch automatically
 
 ## 🔥 Firebase Integration
 
